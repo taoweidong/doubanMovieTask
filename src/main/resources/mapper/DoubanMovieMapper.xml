@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taowd.mapper.DoubanMovieMapper">
+	<!--查询多条数据 -->
+	<select id="selectAll"
+		parameterType="com.taowd.pojo.DoubanMovieBean">
+		SELECT * FROM doubanMovie
+	</select>
+
+	<delete id="deleteAllData">
+		DELETE FROM doubanMovie
+	</delete>
+
+	<insert id="insertData" parameterType="java.util.List">
+		insert into doubanMovie
+		values
+		<foreach collection="paramData" item="item" index="index"
+			separator=",">
+			(
+			#{item.id}, #{item.title},
+			#{item.url},
+			#{item.directors},
+			#{item.rate},
+			#{item.star},
+			#{item.casts},
+			#{item.cover},
+			#{item.cover_x},
+			#{item.cover_y}
+			)
+		</foreach>
+	</insert>
+
+</mapper>
