@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Movie {
-	private int movieId;
+	private String movieId;
 	private String name;
 	private String director;
 	private String scenarist;
@@ -25,6 +25,10 @@ public class Movie {
 	private String ratingNum;
 	private String tags;
 	/**
+	 * 详情链接
+	 */
+	private String url;
+	/**
 	 * 剧情简介.
 	 */
 	private String summary;
@@ -32,9 +36,5 @@ public class Movie {
 	 * 评价人数.
 	 */
 	private String votes;
-
-	public Movie(int movieId) {
-		this.movieId = movieId;
-	}
 
 }

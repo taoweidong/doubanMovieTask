@@ -3,13 +3,31 @@
 <mapper namespace="com.taowd.mapper.DoubanMovieMapper">
 	<!--查询多条数据 -->
 	<select id="selectAll"
-		parameterType="com.taowd.pojo.DoubanMovieBean">
+		resultType="com.taowd.pojo.DoubanMovieBeanMySql">
 		SELECT * FROM doubanMovie
 	</select>
 
 	<delete id="deleteAllData">
 		DELETE FROM doubanMovie
 	</delete>
+
+	<delete id="deleteMovieDetail">
+		DELETE FROM doubanMovieData
+	</delete>
+
+	<insert id="insertMovieDetail"
+		parameterType="com.taowd.pojo.Movie">
+		insert into doubanMovieData
+		values
+		(
+		#{movieId}, #{name}
+		,
+		#{director}, #{scenarist}, #{actors}, #{type}, #{country},
+		#{language}, #{releaseDate}, #{runtime}, #{ratingNum}, #{tags},
+		#{url}, #{summary}, #{votes}
+
+		)
+	</insert>
 
 	<insert id="insertData" parameterType="java.util.List">
 		insert into doubanMovie

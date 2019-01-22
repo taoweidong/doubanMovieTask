@@ -1,24 +1,17 @@
 package com.taowd.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.alibaba.fastjson.JSON;
-import com.taowd.config.DouBanHttpGetUtil;
-import com.taowd.pojo.Movie;
-
 public class DoubanMovieParseUtil {
+	// @Autowired
+	// private DoubanMovieService doubanMovieService;
 
 	public static void main(String[] args) throws Exception {
 
-		List<String> urlList = new ArrayList<String>();
-		urlList.add("https://movie.douban.com/subject/10428476/");
-
-		String content = DouBanHttpGetUtil.getByString(urlList);
-
-		Movie result = DouBanHttpGetUtil.extractMovie("https://movie.douban.com/", content);
-
-		System.out.println(JSON.toJSONString(result));
+//		// 开始解析电影详情
+//		List<DoubanMovieBeanMySql> movieUrlList = doubanMovieService.selectAll();
+//
+//		Movie result = DouBanHttpGetUtil.extractMovie("https://movie.douban.com/subject/10428476/");
+//
+//		System.out.println(JSON.toJSONString(result));
 
 	}
 }

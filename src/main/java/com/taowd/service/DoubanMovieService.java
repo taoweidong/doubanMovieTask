@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.taowd.mapper.DoubanMovieMapper;
 import com.taowd.pojo.DoubanMovieBean;
 import com.taowd.pojo.DoubanMovieBeanMySql;
+import com.taowd.pojo.Movie;
 
 @Service
 public class DoubanMovieService {
@@ -16,12 +17,24 @@ public class DoubanMovieService {
 	@Autowired
 	private DoubanMovieMapper doubanMovieMapper;
 
+	public Integer insertMovieDetail(Movie paramData) {
+		return doubanMovieMapper.insertMovieDetail(paramData);
+	}
+
+	public Integer deleteMovieDetail() {
+		return doubanMovieMapper.deleteMovieDetail();
+	}
+
 	public Integer insertData(List<DoubanMovieBean> paramData) {
 		return doubanMovieMapper.insertData(dealData(paramData));
 	}
 
 	public Integer deleteAllData() {
 		return doubanMovieMapper.deleteAllData();
+	}
+
+	public List<DoubanMovieBeanMySql> selectAll() {
+		return doubanMovieMapper.selectAll();
 	}
 
 	private List<DoubanMovieBeanMySql> dealData(List<DoubanMovieBean> paramData) {

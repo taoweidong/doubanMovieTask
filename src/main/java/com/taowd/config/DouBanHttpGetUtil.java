@@ -31,48 +31,48 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.alibaba.fastjson.JSON;
+import com.taowd.pojo.DoubanMovieBeanMySql;
 import com.taowd.pojo.Movie;
 import com.taowd.util.Constants;
 
 public class DouBanHttpGetUtil {
 
-	protected static Movie movie;
+	protected static Movie movie = new Movie();
 	public static int movieId = 0;
 	public static int commentId = 0;
 
-	public final static String getByString(List<String> urlList) throws Exception {
+	private final static String getByString(String url) throws Exception {
 
 		String responseBody = "";
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		try {
-			for (String url : urlList) {
-				HttpGet httpGet = new HttpGet(url);
-				System.out.println("executing request " + httpGet.getURI());
 
-				ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+			HttpGet httpGet = new HttpGet(url);
+			System.out.println("executing request " + httpGet.getURI());
 
-					public String handleResponse(final HttpResponse response)
-							throws ClientProtocolException, IOException {
-						int status = response.getStatusLine().getStatusCode();
-						System.out.println("------------status:" + status);
-						if (status >= 200 && status < 300) {
-							HttpEntity entity = response.getEntity();
-							return entity != null ? EntityUtils.toString(entity) : null;
-						} else if (status == 300 || status == 301 || status == 302 || status == 304
-								|| status == 400 || status == 401 || status == 403 || status == 404
-								|| new String(status + "").startsWith("5")) { // refer to link
-																				// http://blog.csdn.net/u012043391/article/details/51069441
-							return null;
-						} else {
-							throw new ClientProtocolException(
-									"Unexpected response status: " + status);
-						}
+			ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+
+				public String handleResponse(final HttpResponse response)
+						throws ClientProtocolException, IOException {
+					int status = response.getStatusLine().getStatusCode();
+					System.out.println("------------status:" + status);
+					if (status >= 200 && status < 300) {
+						HttpEntity entity = response.getEntity();
+						return entity != null ? EntityUtils.toString(entity) : null;
+					} else if (status == 300 || status == 301 || status == 302 || status == 304
+							|| status == 400 || status == 401 || status == 403 || status == 404
+							|| new String(status + "").startsWith("5")) { // refer to link
+																			// http://blog.csdn.net/u012043391/article/details/51069441
+						return null;
+					} else {
+						throw new ClientProtocolException("Unexpected response status: " + status);
 					}
-				};
+				}
+			};
 
-				friendlyToDouban();
-				responseBody = httpClient.execute(httpGet, responseHandler);
-			}
+			friendlyToDouban();
+			responseBody = httpClient.execute(httpGet, responseHandler);
+
 		} finally {
 			httpClient.close();
 		}
@@ -80,14 +80,17 @@ public class DouBanHttpGetUtil {
 		return responseBody;
 	}
 
-	public static Movie extractMovie(String url, String content) {
-		System.out.println("==========Parse Movie:" + url + "============");
+	public static Movie extractMovie(DoubanMovieBeanMySql param) throws Exception {
+		String content = DouBanHttpGetUtil.getByString(param.getUrl());
+
+		System.out.println("==========Parse Movie:" + param.getUrl() + "============");
 
 		Document movieDoc = Jsoup.parse(content);
 		if (movieDoc.html().contains("导演") && movieDoc.html().contains("主演")
 				&& movieDoc.html().contains("类型") && movieDoc.html().contains("语言")) {
 			Elements infos = movieDoc.getElementById("info").children();
-			movie = new Movie(movieId++);
+			movie.setMovieId(param.getId());
+			movie.setUrl(param.getUrl());
 			for (Element info : infos) {
 				if (info.childNodeSize() > 0) {
 					String key = info.getElementsByAttributeValue("class", "pl").text();
@@ -136,8 +139,6 @@ public class DouBanHttpGetUtil {
 					movieDoc.getElementsByAttributeValue("property", "v:itemreviewed").text());
 			movie.setRatingNum(
 					movieDoc.getElementsByAttributeValue("property", "v:average").text());
-			// }
-
 		}
 
 		movie.setSummary(movieDoc.getElementsByAttributeValue("property", "v:summary").text());
