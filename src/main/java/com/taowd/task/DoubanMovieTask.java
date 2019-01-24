@@ -56,7 +56,7 @@ public class DoubanMovieTask {
 	private FreeMarkerConfigurer configurer;
 
 	// @Scheduled(cron = "0/5 * * * * *")
-	@Scheduled(cron = "* 50 23 ? * *")
+	@Scheduled(cron = "* 10 22 ? * *")
 	// 0 15 10 ? * *
 	public void getMovieData() throws Exception {
 		doubanMovieService.deleteMovieDetail();
